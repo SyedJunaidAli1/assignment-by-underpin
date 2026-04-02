@@ -39,7 +39,7 @@ describe("Task Service", () => {
 
     expect(result).toBeUndefined(); // important
   });
-  
+
   it("should paginate tasks", () => {
     taskService.create({ title: "Task 1" });
     taskService.create({ title: "Task 2" });
@@ -51,7 +51,7 @@ describe("Task Service", () => {
     expect(result[0].title).toBe("Task 1");
     expect(result[1].title).toBe("Task 2");
   });
-  
+
   it("should filter tasks by status", () => {
     taskService.create({ title: "Task 1", status: "todo" });
     taskService.create({ title: "Task 2", status: "done" });
@@ -61,7 +61,7 @@ describe("Task Service", () => {
     expect(result.length).toBe(1);
     expect(result[0].title).toBe("Task 2");
   });
-  
+
   it("should get stats", () => {
     taskService.create({ title: "Task 1", status: "todo" });
     taskService.create({ title: "Task 2", status: "done" });
@@ -71,7 +71,7 @@ describe("Task Service", () => {
     expect(result.todo).toBe(1);
     expect(result.done).toBe(1);
   });
-  
+
   it("should update task", () => {
     const task = taskService.create({ title: "Task 1", status: "todo" });
     taskService.update(task.id, { status: "done" });
@@ -80,7 +80,7 @@ describe("Task Service", () => {
 
     expect(updated.status).toBe("done");
   });
-  
+
   it("should delete task", () => {
     const task = taskService.create({ title: "Task 1", status: "todo" });
     taskService.remove(task.id);
@@ -89,7 +89,7 @@ describe("Task Service", () => {
 
     expect(result).toBeUndefined();
   });
-  
+
   it("should complete task", () => {
     const task = taskService.create({ title: "Task 1", status: "todo" });
     taskService.completeTask(task.id);
@@ -98,55 +98,55 @@ describe("Task Service", () => {
 
     expect(updated.status).toBe("done");
   });
-  
+
   it("should reset everything", () => {
     const task = taskService.create({ title: "Task 1", status: "done" });
     taskService._reset();
 
-    const updated = taskService.getAll()
+    const updated = taskService.getAll();
 
     expect(updated.length).toBe(0);
   });
-  
+
   it("should not create task without title", () => {
     expect(() => {
       taskService.create({});
     }).toThrow("Title is required");
   });
-  
+
   it("should return null when updating invalid id", () => {
     const result = taskService.update("invalid-id", { title: "Test" });
-  
+
     expect(result).toBeNull();
   });
-  
+
   it("should return false when deleting invalid id", () => {
     const result = taskService.remove("invalid-id");
-  
+
     expect(result).toBe(false);
   });
-  
+
   it("should return null when completing invalid task", () => {
     const result = taskService.completeTask("invalid-id");
-  
+
     expect(result).toBeNull();
   });
-  
+
   it("should return correct page", () => {
     for (let i = 1; i <= 5; i++) {
       taskService.create({ title: `Task ${i}` });
     }
-  
+
     const result = taskService.getPaginated(2, 2);
-  
+
     expect(result[0].title).toBe("Task 3"); // THIS MAY FAIL 🔥
   });
-  
+
   it("should not match partial status", () => {
     taskService.create({ title: "Task 1", status: "todo" });
-  
+
     const result = taskService.getByStatus("do");
-  
+
     expect(result.length).toBe(0); // WILL FAIL 🔥
   });
 });

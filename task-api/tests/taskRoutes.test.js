@@ -43,74 +43,70 @@ describe("Task API", () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.title).toBe("Updated Task");
   });
-  
+
   it("should delete a task", async () => {
     const createRes = await request(app)
       .post("/tasks")
       .send({ title: "Delete me" });
-  
+
     const id = createRes.body.id;
-  
+
     const res = await request(app).delete(`/tasks/${id}`);
-  
+
     expect(res.statusCode).toBe(204);
   });
-  
+
   it("should complete a task", async () => {
     const createRes = await request(app)
       .post("/tasks")
       .send({ title: "Complete me" });
-  
+
     const id = createRes.body.id;
-  
-    const res = await request(app)
-      .patch(`/tasks/${id}/complete`);
-  
+
+    const res = await request(app).patch(`/tasks/${id}/complete`);
+
     expect(res.statusCode).toBe(200);
     expect(res.body.status).toBe("done");
   });
-  
+
   it("should return 404 for non-existing task", async () => {
-    const res = await request(app)
-      .get("/tasks/invalid-id");
-  
+    const res = await request(app).get("/tasks/invalid-id");
+
     expect(res.statusCode).toBe(404);
   });
-  
+
   it("should assign a task", async () => {
     const createRes = await request(app)
       .post("/tasks")
       .send({ title: "Task to assign" });
-  
+
     const id = createRes.body.id;
-  
+
     const res = await request(app)
       .patch(`/tasks/${id}/assign`)
       .send({ assignee: "Junaid" });
-  
+
     expect(res.statusCode).toBe(200);
     expect(res.body.assignee).toBe("Junaid");
   });
-  
+
   it("should return 404 if task not found", async () => {
     const res = await request(app)
       .patch("/tasks/invalid-id/assign")
       .send({ assignee: "Junaid" });
-  
+
     expect(res.statusCode).toBe(404);
   });
-  
+
   it("should fail if assignee is empty", async () => {
-    const createRes = await request(app)
-      .post("/tasks")
-      .send({ title: "Task" });
-  
+    const createRes = await request(app).post("/tasks").send({ title: "Task" });
+
     const id = createRes.body.id;
-  
+
     const res = await request(app)
       .patch(`/tasks/${id}/assign`)
       .send({ assignee: "" });
-  
+
     expect(res.statusCode).toBe(400);
   });
 });
