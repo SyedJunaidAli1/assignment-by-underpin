@@ -39,3 +39,31 @@ Unit test for create()
 
 Fix:
 Add validation for required fields
+
+## Bug: Completing a task resets priority
+
+Expected:
+Completing a task should only update status and completedAt
+
+Actual:
+Priority was being reset to "medium"
+
+How discovered:
+Unit test for completeTask
+
+Fix:
+Removed priority override from completeTask
+
+## Bug: Invalid status values allowed
+
+Expected:
+Only "todo", "in_progress", "done" should be allowed
+
+Actual:
+Any string was accepted as status
+
+How discovered:
+Edge case testing
+
+Fix:
+Added validation for allowed status values in crate
