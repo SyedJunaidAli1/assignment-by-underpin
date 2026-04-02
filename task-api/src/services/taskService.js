@@ -29,12 +29,21 @@ const getStats = () => {
 };
 
 const create = ({
-  title = "",
+  title,
   description = "",
   status = "todo",
   priority = "medium",
   dueDate = null,
 }) => {
+  if (!title || title.trim() === "") {
+    throw new Error("Title is required");
+  }
+
+  const validStatus = ["todo", "in_progress", "done"];
+  if (!validStatus.includes(status)) {
+    throw new Error("Invalid status");
+  }
+
   const task = {
     id: uuidv4(),
     title,
