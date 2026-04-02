@@ -109,9 +109,9 @@ describe("Task Service", () => {
   });
   
   it("should not create task without title", () => {
-    const task = taskService.create({});
-  
-    expect(task.title).toBeUndefined(); // this exposes bug
+    expect(() => {
+      taskService.create({});
+    }).toThrow("Title is required");
   });
   
   it("should return null when updating invalid id", () => {
